@@ -65,6 +65,9 @@ set.seed(111)
 predicted_sri <- predict(fit, newdata = data) + rnorm(nrow(data), 0, sigma(fit))
 Y2_sri <- ifelse(is.na(data$Y2), predicted_sri, data$Y2)
 
+sd(data$Y2, na.rm = TRUE)
+sd(Y2_sri)
+
 plot(density(data$Y2[-which(is.na(data$Y2) == TRUE)]), lwd = 2, col = "blue", main = "Stochastic regression imputation", ylim = c(0,0.3))
 lines(density(Y2_sri), lwd = 2, col = "red")
 legend(6, 0.3,legend = c("Complete data", "Completed data(after imputation)"),cex=0.8,
@@ -126,6 +129,9 @@ set.seed(111)
 predicted_sri <- predict(fit, newdata = data) + rnorm(nrow(data), 0, sigma(fit))
 Y2_sri <- ifelse(is.na(data$Y2), predicted_sri, data$Y2)
 
+sd(data$Y2, na.rm = TRUE)
+sd(Y2_sri)
+
 plot(density(data$Y2[-which(is.na(data$Y2) == TRUE)]), lwd = 2, col = "blue", main = "Stochastic regression imputation", ylim = c(0,0.5))
 lines(density(Y2_sri), lwd = 2, col = "red")
 legend(8, 0.5,legend = c("Complete data", "Completed data(after imputation)"),cex=0.8,
@@ -134,19 +140,66 @@ legend(8, 0.5,legend = c("Complete data", "Completed data(after imputation)"),ce
 ```
 
 
+## Question 4
+## (a)
+```{r}
+
+mean(databp$recovtime, na.rm = TRUE)
+sd(databp$recovtime, na.rm = TRUE)
+
+cor(databp$recovtime, databp$logdose, use = "complete")
+cor(databp$recovtime, databp$bloodp, use = "complete")
+```
+
+## Question 4
+## (b)
+```{r}
+mean(databp$recovtime, na.rm = TRUE)
+re_mi <- ifelse(is.na(databp$recovtime), 19.27273, databp$recovtime)
+
+mean(re_mi)
+sd(re_mi)
+
+cor(re_mi, databp$logdose)
+cor(re_mi, databp$bloodp)
+```
+
+## Question 4
+## (c)
+```{r}
+fit <- lm(recovtime ~ logdose+bloodp, data = databp) 
+summary(fit)
+fit$coefficients
+predicted_ri <- predict(fit, newdata = databp)
+re_ri <- ifelse(is.na(databp$recovtime), predicted_ri, databp$recovtime)
+mean(re_ri)
+sd(re_ri)
+
+cor(re_ri, databp$logdose)
+cor(re_ri, databp$bloodp)
+
+```
 
 
+## Question 4
+## (d)
+```{r}
+fit <- lm(recovtime ~ logdose+bloodp, data = databp) 
+summary(fit)
+fit$coefficients
 
 
+set.seed(111)
+predicted_sri <- predict(fit, newdata = databp) + rnorm(nrow(databp), 0, sigma(fit))
 
+re_sri <- ifelse(is.na(databp$recovtime), predicted_sri, databp$recovtime)
+mean(re_sri)
+sd(re_sri)
 
+cor(re_sri, databp$logdose)
+cor(re_sri, databp$bloodp)
 
-
-
-
-
-
-
+```
 
 
 
