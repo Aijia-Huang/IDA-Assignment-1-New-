@@ -5,24 +5,27 @@ output: html_document
 
 ## 1.
 ### (a) (ii) 0.3
-###
+### The MCAR means the missing data distribution and observed data distribution and complete data distribution are similar. Further, MCAR implies that the probability of missing value for the variable is the same for all individuals. And 0.3 in question means into ALQ=YES, the probability of missing value is 0.3. Therefore, ALQ=No is the same distribution with ALQ=Yes, and the answer should be 0.3.
 
 ### (b) (ii) The probability of ALQ being missing is independent of the Yes/No value of ALQ after adjusting for gender.
 ### Since ALQ is MAR, hence the missing values in ALQ dosen't depend on themselves, and they should depend on other observed variable and data. So, (i) and (iii) are both incorrect.
 
 ###(c) (iii) It is impossible to conclude from the information given.
-### 
+### The similar idea with question (a), however, MAR doesn't have same distribution of  missing data, observed data and complete data. Also, the probability of missing value for the variable is not the same for all individuals. Therefore, although we know the probability of ALQ being missing for men is 0.1, it is impossible to conclude the question from that.
+
 
 ## 2.The largest possible subsample is 90, and the smallest subsample is 0.
-### The dataset consists of 100 subjects and 10 variables. Each variable contains 10% of missing values. If 10% missing values of each variable are the same position, there will be the largest possible subsample,90. If 10% missing values of each variable are the different position totally, there will be the smallest possible subsample,0.
+### The dataset consists of 100 subjects and 10 variables. Each variable contains 10% of missing values. If 10% missing values of each variable are the same position, there will be the largest possible subsample,90. If 10% missing values of each variable are the different position totally(不重复的位置), there will be the smallest possible subsample,0.
+
 
 ## 3.
 ### (a) MAR
+### MAR:Since a=2 and b=0,hence in the missing condition: "a*(Y1-1)+b*(Y2-5)+Z3<0", there isn't any contributions of Y2. So the missing values of Y2 are unrelate to themselves and relate to Y1. Therefore, MAR.
 
 ```{r}
 #Question 3
 # (a)
-set.seed(111)
+set.seed(1)
 n<- 500
 mu1<-mu2<-mu3<-0
 sigma1<-sigma2<-sigma3<-1
@@ -35,28 +38,22 @@ Y2<-5+2*z1+z2
 
 #MAR
 Y2_MAR_obs <- Y2[2*z1 +z3 >= 0]
-mean(Y2_MAR_obs)
-
 Y2_MAR_mis <- Y2[2*z1 +z3<0]
+
 plot(density(Y2), lwd = 2, col = "blue", main = "MAR", ylim = c(0,0.3))
 lines(density(Y2_MAR_obs), lwd = 2, col = "red")
 legend(6, 0.3,legend = c("Complete data", "Observed data"),cex=0.8,
        col = c("blue", "red"), lty = c(1, 1), lwd = c(2, 2), bty = "n")
 
-ind_MAR <- which(2*z1 +z3 >= 0) 
-g1_MAR <- Y1[ind_MAR] 
-g2_MAR <- Y1[-ind_MAR]
-mean(g1_MAR)
-mean(g2_MAR)
-t.test(g1_MAR, g2_MAR, paired = FALSE, var.equal = FALSE)
-
 ```
+
 ## Question 3
 ## (b)
 
 ```{r}
 #Question 3
 # (b)
+set.seed(1)
 n<- 500
 mu1<-mu2<-mu3<-0
 sigma1<-sigma2<-sigma3<-1
@@ -67,31 +64,26 @@ z3<-rnorm(n,mu3,sigma3)
 Y1<-1+z1
 Y2<-5+2*z1+z2
 
-Y2[2*z1 +z3<0]=NA
+Y2c=Y2
+Y2c[which((2*z1 +z3)<0)]=NA
 
-data<-data.frame(Y1=c(Y1), Y2=c(Y2))
+data<-data.frame(Y1=Y1, Y2cc=Y2c)
 
-fit <- lm(Y2 ~ Y1, data = data) 
-summary(fit)
-fit$coefficients
+fit <- lm(Y2cc ~ Y1, data = data) 
 
-set.seed(111)
+set.seed(1)
 predicted_sri <- predict(fit, newdata = data) + rnorm(nrow(data), 0, sigma(fit))
-Y2_sri <- ifelse(is.na(data$Y2), predicted_sri, data$Y2)
+Y2_sri <- ifelse(is.na(data$Y2cc) == TRUE, predicted_sri, data$Y2cc)
 
-sd(data$Y2, na.rm = TRUE)
-sd(Y2_sri)
-
-plot(density(data$Y2[-which(is.na(data$Y2) == TRUE)]), lwd = 2, col = "blue", main = "Stochastic regression imputation", ylim = c(0,0.3))
+plot(density(Y2), lwd = 2, col = "blue", main = "Stochastic regression imputation", ylim = c(0,0.3))
 lines(density(Y2_sri), lwd = 2, col = "red")
 legend(6, 0.3,legend = c("Complete data", "Completed data(after imputation)"),cex=0.8,
        col = c("blue", "red"), lty = c(1, 1), lwd = c(2, 2), bty = "n")
 
 ```
 
-## Question 3
-## (c)
-
+### (c) MNAR
+### MAR:Since a=0 and b=2, hence in the missing condition: "a*(Y1-1)+b*(Y2-5)+Z3<0", there isn't any contributions of Y1. So the missing values of Y2 are unrelate to Y1 and relate to Y2. Therefore, MNAR.
 ```{r}
 #Question 3
 # (c)
@@ -121,6 +113,7 @@ legend(8, 0.5,legend = c("Complete data", "Observed data"),cex=0.8,
 ```{r}
 #Question 3
 # (d)
+set.seed(1)
 n<- 500
 mu1<-mu2<-mu3<-0
 sigma1<-sigma2<-sigma3<-1
@@ -131,24 +124,20 @@ z3<-rnorm(n,mu3,sigma3)
 Y1<-1+z1
 Y2<-5+2*z1+z2
 
-Y2[2*Y2-10+z3 < 0]=NA
+Y2d=Y2
+Y2d[(4*z1+2*z2+z3)<0]=NA
 
-data<-data.frame(Y1=c(Y1), Y2=c(Y2))
+data_d<-data.frame(Y1=c(Y1), Y2dd=c(Y2d))
 
-fit <- lm(Y2 ~ Y1, data = data) 
-summary(fit)
-fit$coefficients
+fit_d<- lm(Y2dd ~ Y1, data = data_d) 
 
-set.seed(111)
-predicted_sri <- predict(fit, newdata = data) + rnorm(nrow(data), 0, sigma(fit))
-Y2_sri <- ifelse(is.na(data$Y2), predicted_sri, data$Y2)
+set.seed(1)
+predicted_sri_d <- predict(fit_d, newdata = data_d) + rnorm(nrow(data_d), 0, sigma(fit_d))
+Y2_sri_d <- ifelse(is.na(data_d$Y2dd), predicted_sri_d, data_d$Y2dd)
 
-sd(data$Y2, na.rm = TRUE)
-sd(Y2_sri)
-
-plot(density(data$Y2[-which(is.na(data$Y2) == TRUE)]), lwd = 2, col = "blue", main = "Stochastic regression imputation", ylim = c(0,0.5))
-lines(density(Y2_sri), lwd = 2, col = "red")
-legend(8, 0.5,legend = c("Complete data", "Completed data(after imputation)"),cex=0.8,
+plot(density(Y2), lwd = 2, col = "blue", main = "Stochastic regression imputation", ylim = c(0,0.27))
+lines(density(Y2_sri_d), lwd = 2, col = "red")
+legend(8, 0.27,legend = c("Complete data", "Completed data(after imputation)"),cex=0.8,
        col = c("blue", "red"), lty = c(1, 1), lwd = c(2, 2), bty = "n")
 
 ```
@@ -180,70 +169,93 @@ re_mi <- ifelse(is.na(databp$recovtime), mean(databp$recovtime, na.rm = TRUE), d
 
 mearecov<-mean(re_mi)
 searecov<-sd(re_mi)/sqrt(length(re_mi))
-cor1<-cor(re_mi, databp$logdose)
-cor2<-cor(re_mi, databp$bloodp)
+cor1_b<-cor(re_mi, databp$logdose)
+cor2_b<-cor(re_mi, databp$bloodp)
 
 mearecov
 searecov
-cor1
-cor2
+cor1_b
+cor2_b
 ```
 
 ### (c) The mean value of the recovery time provided by a complete case analysis is 19.44428 and the associated standard error is 2.312845.
 ### The correlations between the recovery time and the dose is 0.2801835, and the correlations between the recovery time and the blood pressure is -0.0111364.
 
 ```{r}
-fit <- lm(recovtime ~ logdose+bloodp, data = databp) 
-
-predicted_ri <- predict(fit, newdata = databp)
+fit_c <- lm(recovtime ~ logdose+bloodp, data = databp) 
+coef(fit_c)
+predicted_ri <- predict(fit_c, newdata = databp)
 re_ri <- ifelse(is.na(databp$recovtime), predicted_ri, databp$recovtime)
 
 merrecov<-mean(re_ri)
 serrecov<-sd(re_ri)/sqrt(length(re_ri))
-cor1<-cor(re_ri, databp$logdose)
-cor2<-cor(re_ri, databp$bloodp)
+cor1_c<-cor(re_ri, databp$logdose)
+cor2_c<-cor(re_ri, databp$bloodp)
 
 merrecov
 serrecov
-cor1
-cor2
+cor1_c
+cor2_c
 ```
 
-### (d) The mean value of the recovery time provided by a complete case analysis is 18.24385 and the associated standard error is 2.692533.
-### The correlations between the recovery time and the dose is 0.34809, and the correlations between the recovery time and the blood pressure is -0.01829532.
+### (d) The mean value of the recovery time provided by a complete case analysis is 20.4598 and the associated standard error is 2.444571.
+### The correlations between the recovery time and the dose is 0.2284537, and the correlations between the recovery time and the blood pressure is -0.01786944.
+
+### 
 
 ```{r}
-fit <- lm(recovtime ~ logdose+bloodp, data = databp) 
+fit_d <- lm(recovtime ~ logdose+bloodp, data = databp) 
 
-set.seed(111)
-predicted_sri <- predict(fit, newdata = databp) + rnorm(nrow(databp), 0, sigma(fit))
+set.seed(1)
+predicted_sri <- predict(fit_d, newdata = databp) + rnorm(nrow(databp), 0, sigma(fit_d))
 re_sri <- ifelse(is.na(databp$recovtime), predicted_sri, databp$recovtime)
 
 mesrecov<-mean(re_sri)
 sesrecov<-sd(re_sri)/sqrt(length(re_sri))
-cor1<-cor(re_sri, databp$logdose)
-cor2<-cor(re_sri, databp$bloodp)
+cor1_d<-cor(re_sri, databp$logdose)
+cor2_d<-cor(re_sri, databp$bloodp)
 
 mesrecov
 sesrecov
-cor1
-cor2
+cor1_d
+cor2_d
 ```
 
 ### (e)
 ```{r}
-mis_donors_1<- which(is.na(databp$recovtime) == TRUE)
-obs_donors_1<- which(is.na(databp$recovtime) == FALSE)
+f<-function(logdose,bloodp){
+  co<-coef(fit_c)
+  print (co[[1]]+logdose*co[[2]]+bloodp*co[[3]])
+}
 
-fit <- lm(recovtime ~ logdose+bloodp, data = databp) 
-predicted_re<-predict(fit,newdata=databp)
-y <- predicted_re[-c(4,10,22)]
-pre_4<-predicted_re[4]
+pre_value<-f(databp[,1],databp[,2])
+y<-databp$recovtime
 
-#for (i in 1:22) {
-#  if (min((y[i])^2-(pre_4^2)))
-#}
+for (i in 1:25){ 
+  if (((pre_value[i]-pre_value[4])^2) == min((pre_value[-c(4,10,22)]-pre_value[4])^2)){
+    print(i)
+    y[4]<-pre_value[i]
+    print(y[4])
+  }
+}
 
+for (i in 1:25){ 
+  if (((pre_value[i]-pre_value[10])^2) == min((pre_value[-c(4,10,22)]-pre_value[10])^2)){
+    print(i)
+    y[10]<-pre_value[i]
+    print(y[10])
+  }
+}
+
+for (i in 1:25){ 
+  if (((pre_value[i]-pre_value[22])^2) == min((pre_value[-c(4,10,22)]-pre_value[22])^2)){
+    print(i)
+    y[22]<-pre_value[i]
+    print(y[22])
+  }
+}
+
+print(y)
 ```
 
 
