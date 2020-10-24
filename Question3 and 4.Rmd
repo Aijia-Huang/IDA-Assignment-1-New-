@@ -1,14 +1,28 @@
 ---
-title: "Question 3 and 4"
+title: "IDA Assignment 1"
 output: html_document
 ---
 
-## Question 3
-## (a)
+## 1.
+### (a) (ii) 0.3
+###
+
+### (b) (ii) The probability of ALQ being missing is independent of the Yes/No value of ALQ after adjusting for gender.
+### Since ALQ is MAR, hence the missing values in ALQ dosen't depend on themselves, and they should depend on other observed variable and data. So, (i) and (iii) are both incorrect.
+
+###(c) (iii) It is impossible to conclude from the information given.
+### 
+
+## 2.The largest possible subsample is 90, and the smallest subsample is 0.
+### The dataset consists of 100 subjects and 10 variables. Each variable contains 10% of missing values. If 10% missing values of each variable are the same position, there will be the largest possible subsample,90. If 10% missing values of each variable are the different position totally, there will be the smallest possible subsample,0.
+
+## 3.
+### (a) MAR
 
 ```{r}
 #Question 3
 # (a)
+set.seed(111)
 n<- 500
 mu1<-mu2<-mu3<-0
 sigma1<-sigma2<-sigma3<-1
@@ -139,67 +153,101 @@ legend(8, 0.5,legend = c("Complete data", "Completed data(after imputation)"),ce
 
 ```
 
+## 4.
+### (a) The mean value of the recovery time provided by a complete case analysis is 19.27273 and the associated standard error is 2.603013.
+### The correlations between the recovery time and the dose is 0.2391256, and the correlations between the recovery time and the blood pressure is -0.01952862.
 
-## Question 4
-## (a)
 ```{r}
+load("databp.Rdata")
+recov<- which(is.na(databp$recovtime) == FALSE)
+merecov<-mean(databp$recovtime, na.rm = TRUE)
+serecov<-sd(databp$recovtime, na.rm = TRUE)/sqrt(length(recov))
 
-mean(databp$recovtime, na.rm = TRUE)
-sd(databp$recovtime, na.rm = TRUE)
+cor1<-cor(databp$recov, databp$logdose, use = "complete")
+cor2<-cor(databp$recov, databp$bloodp, use = "complete")
 
-cor(databp$recovtime, databp$logdose, use = "complete")
-cor(databp$recovtime, databp$bloodp, use = "complete")
+merecov
+serecov
+cor1
+cor2
 ```
 
-## Question 4
-## (b)
+### (b) The mean value of the recovery time provided by a complete case analysis is 19.27273 and the associated standard error is 2.284135.
+### The correlations between the recovery time and the dose is 0.2150612, and the correlations between the recovery time and the blood pressure is -0.01934126.
+
 ```{r}
-mean(databp$recovtime, na.rm = TRUE)
-re_mi <- ifelse(is.na(databp$recovtime), 19.27273, databp$recovtime)
+re_mi <- ifelse(is.na(databp$recovtime), mean(databp$recovtime, na.rm = TRUE), databp$recovtime)
 
-mean(re_mi)
-sd(re_mi)
+mearecov<-mean(re_mi)
+searecov<-sd(re_mi)/sqrt(length(re_mi))
+cor1<-cor(re_mi, databp$logdose)
+cor2<-cor(re_mi, databp$bloodp)
 
-cor(re_mi, databp$logdose)
-cor(re_mi, databp$bloodp)
+mearecov
+searecov
+cor1
+cor2
 ```
 
-## Question 4
-## (c)
+### (c) The mean value of the recovery time provided by a complete case analysis is 19.44428 and the associated standard error is 2.312845.
+### The correlations between the recovery time and the dose is 0.2801835, and the correlations between the recovery time and the blood pressure is -0.0111364.
+
 ```{r}
 fit <- lm(recovtime ~ logdose+bloodp, data = databp) 
-summary(fit)
-fit$coefficients
+
 predicted_ri <- predict(fit, newdata = databp)
 re_ri <- ifelse(is.na(databp$recovtime), predicted_ri, databp$recovtime)
-mean(re_ri)
-sd(re_ri)
 
-cor(re_ri, databp$logdose)
-cor(re_ri, databp$bloodp)
+merrecov<-mean(re_ri)
+serrecov<-sd(re_ri)/sqrt(length(re_ri))
+cor1<-cor(re_ri, databp$logdose)
+cor2<-cor(re_ri, databp$bloodp)
 
+merrecov
+serrecov
+cor1
+cor2
 ```
 
+### (d) The mean value of the recovery time provided by a complete case analysis is 18.24385 and the associated standard error is 2.692533.
+### The correlations between the recovery time and the dose is 0.34809, and the correlations between the recovery time and the blood pressure is -0.01829532.
 
-## Question 4
-## (d)
 ```{r}
 fit <- lm(recovtime ~ logdose+bloodp, data = databp) 
-summary(fit)
-fit$coefficients
-
 
 set.seed(111)
 predicted_sri <- predict(fit, newdata = databp) + rnorm(nrow(databp), 0, sigma(fit))
-
 re_sri <- ifelse(is.na(databp$recovtime), predicted_sri, databp$recovtime)
-mean(re_sri)
-sd(re_sri)
 
-cor(re_sri, databp$logdose)
-cor(re_sri, databp$bloodp)
+mesrecov<-mean(re_sri)
+sesrecov<-sd(re_sri)/sqrt(length(re_sri))
+cor1<-cor(re_sri, databp$logdose)
+cor2<-cor(re_sri, databp$bloodp)
+
+mesrecov
+sesrecov
+cor1
+cor2
+```
+
+### (e)
+```{r}
+mis_donors_1<- which(is.na(databp$recovtime) == TRUE)
+obs_donors_1<- which(is.na(databp$recovtime) == FALSE)
+
+fit <- lm(recovtime ~ logdose+bloodp, data = databp) 
+predicted_re<-predict(fit,newdata=databp)
+y <- predicted_re[-c(4,10,22)]
+pre_4<-predicted_re[4]
+
+#for (i in 1:22) {
+#  if (min((y[i])^2-(pre_4^2)))
+#}
 
 ```
+
+
+
 
 
 
