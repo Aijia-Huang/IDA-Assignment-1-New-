@@ -13,7 +13,7 @@ output:
 ### (b) (ii) The probability of ALQ being missing is independent of the Yes/No value of ALQ after adjusting for gender.
 ### Since ALQ is MAR, hence the missing values in ALQ dosen't depend on themselves, and they should depend on other observed variable and data. So, (i) and (iii) are both incorrect.
 
-###(c) (iii) It is impossible to conclude from the information given.
+### (c) (iii) It is impossible to conclude from the information given.
 ### The similar idea with question (a), however, MAR doesn't have the same distribution of missing data, observed data and complete data. Also, the probability of missing value for the variable is not the same for all individuals. Therefore, although we know the probability of ALQ being missing for men is 0.1, it is impossible to conclude the question from that.
 
 
@@ -152,10 +152,10 @@ legend(8, 0.27,legend = c("Complete data", "Completed data(after imputation)"),c
 
 ## 4.
 ### (a) 
-###The mean value of the recovery time provided by a complete case analysis is 19.27273. 
-###The associated standard error is 2.603013.
-###The correlations between the recovery time and the dose is 0.2391256. 
-###The correlations between the recovery time and the blood pressure is -0.01952862.
+### The mean value of the recovery time provided by a complete case analysis is 19.27273. 
+### The associated standard error is 2.603013.
+### The correlations between the recovery time and the dose is 0.2391256. 
+### The correlations between the recovery time and the blood pressure is -0.01952862.
 
 ```{r}
 load("databp.Rdata")
@@ -173,10 +173,10 @@ cor2
 ```
 
 ### (b) 
-###The mean value of the recovery time provided by a complete case analysis is 19.27273.
-###The associated standard error is 2.284135.
-###The correlations between the recovery time and the dose is 0.2150612.
-###The correlations between the recovery time and the blood pressure is -0.01934126.
+### The mean value of the recovery time provided by a complete case analysis is 19.27273.
+### The associated standard error is 2.284135.
+### The correlations between the recovery time and the dose is 0.2150612.
+### The correlations between the recovery time and the blood pressure is -0.01934126.
 
 ```{r}
 re_mi <- ifelse(is.na(databp$recovtime), mean(databp$recovtime, na.rm = TRUE), databp$recovtime)
@@ -193,10 +193,10 @@ cor2_b
 ```
 
 ### (c) 
-###The mean value of the recovery time provided by a complete case analysis is 19.44428.
-###The associated standard error is 2.312845.
-###The correlations between the recovery time and the dose is 0.2801835.
-###The correlations between the recovery time and the blood pressure is -0.0111364.
+### The mean value of the recovery time provided by a complete case analysis is 19.44428.
+### The associated standard error is 2.312845.
+### The correlations between the recovery time and the dose is 0.2801835.
+### The correlations between the recovery time and the blood pressure is -0.0111364.
 
 ```{r}
 fit_c <- lm(recovtime ~ logdose+bloodp, data = databp) 
@@ -215,10 +215,10 @@ cor2_c
 ```
 
 ### (d) 
-###The mean value of the recovery time provided by a complete case analysis is 20.4598.
-###The associated standard error is 2.444571.
-###The correlations between the recovery time and the dose is 0.2284537.
-###The correlations between the recovery time and the blood pressure is -0.01786944.
+### The mean value of the recovery time provided by a complete case analysis is 20.4598.
+### The associated standard error is 2.444571.
+### The correlations between the recovery time and the dose is 0.2284537.
+### The correlations between the recovery time and the blood pressure is -0.01786944.
 
 ### As for stochastic regression imputation, with adding noise term, which can lead to relatively implausible predictions. For example, it makes no sense that impute a negative value for the Variables that are prone to missing. 
 
