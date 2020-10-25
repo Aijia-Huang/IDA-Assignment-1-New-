@@ -220,7 +220,7 @@ cor2_c
 ###The correlations between the recovery time and the dose is 0.2284537.
 ###The correlations between the recovery time and the blood pressure is -0.01786944.
 
-### As for stochastic regression imputation, with adding noise term, which can lead to relatively implausible predictions. For example, it makes no sense that impute a negative value for the Variables that are prone to missing。 
+### As for stochastic regression imputation, with adding noise term, which can lead to relatively implausible predictions. For example, it makes no sense that impute a negative value for the Variables that are prone to missing. 
 
 ```{r}
 fit_d <- lm(recovtime ~ logdose+bloodp, data = databp) 
