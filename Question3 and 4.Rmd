@@ -220,7 +220,7 @@ cor2_c
 ### The correlations between the recovery time and the dose is 0.2284537.
 ### The correlations between the recovery time and the blood pressure is -0.01786944.
 
-### As for stochastic regression imputation, with adding noise term, which can lead to relatively implausible predictions. For example, it makes no sense that impute a negative value for the Variables that are prone to missing. 
+### As for stochastic regression imputation, with adding noise term, which can lead to relatively implausible predictions. For example, it makes no sense that impute a negative value for the variables that are prone to missing. 
 
 ```{r}
 fit_d <- lm(recovtime ~ logdose+bloodp, data = databp) 
@@ -241,7 +241,10 @@ cor2_d
 ```
 
 ### (e)
-### As for this question, as shown in the output, first three lines output is the predicted values of each individuals in recovtime. Further, for the 4th, 10th and 22th missing value in recovtime should be imputed with the 6th, 2nd, and 17th value in the recovtime. And the imputed vales are 13, 10, 39 respectively. Finally, there is an output with the whole vales (after imputing) of recovtime.
+### As for this question, as shown in the output, the first output is the predicted values of each individuals in recovtime. Further, for the 4th, 10th and 22th missing value in recovtime should be imputed with the 6th, 2nd, and 17th value in the recovtime. And the imputed vales are 13, 10, 39 respectively. Finally, there is an output with the whole vales (after imputing) of recovtime. Additionally, the mean value of the recovery time provided by a complete case analysis is 19.44.
+### The associated standard error is 2.464467.
+### The correlations between the recovery time and the dose is 0.3037945.
+### The correlations between the recovery time and the blood pressure is -0.03208685.
 
 ```{r}
 f<-function(logdose,bloodp){
@@ -277,11 +280,20 @@ for (i in 1:25){
 }
 
 print(y)
+merecov_e<-mean(y)
+serecov_e<-sd(y)/sqrt(length(y))
+cor1_e<-cor(y, databp$logdose)
+cor2_e<-cor(y, databp$bloodp)
+
+merecov_e
+serecov_e
+cor1_e
+cor2_e
 ```
 
 
 ### (f)
-#### Predictive mean matching over stochastic regression imputation will be more precision. And predictive mean matching can relatively fix the problem that stochastic regression attenuate statndard errors of the estimates as many single imputation.
+### Predictive mean matching over stochastic regression imputation will be more precision. And predictive mean matching can relatively fix the problem that stochastic regression attenuate statndard errors of the estimates as many single imputation.
 
 ### Firstly, there are many problems which are nonlinear, hence it will be more precision if this problem can be modified. Additionally, this approach maybe can produce substantially biased estimates of correlations and regression coefficients, which is another potential problem.  
 
