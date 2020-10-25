@@ -1,6 +1,9 @@
 ---
 title: "IDA Assignment 1"
-output: html_document
+author: "Aijia Huang s2036061"
+output:
+  word_document: default
+  html_document: default
 ---
 
 ## 1.
@@ -11,16 +14,18 @@ output: html_document
 ### Since ALQ is MAR, hence the missing values in ALQ dosen't depend on themselves, and they should depend on other observed variable and data. So, (i) and (iii) are both incorrect.
 
 ###(c) (iii) It is impossible to conclude from the information given.
-### The similar idea with question (a), however, MAR doesn't have same distribution of  missing data, observed data and complete data. Also, the probability of missing value for the variable is not the same for all individuals. Therefore, although we know the probability of ALQ being missing for men is 0.1, it is impossible to conclude the question from that.
+### The similar idea with question (a), however, MAR doesn't have the same distribution of missing data, observed data and complete data. Also, the probability of missing value for the variable is not the same for all individuals. Therefore, although we know the probability of ALQ being missing for men is 0.1, it is impossible to conclude the question from that.
 
 
 ## 2.The largest possible subsample is 90, and the smallest subsample is 0.
-### The dataset consists of 100 subjects and 10 variables. Each variable contains 10% of missing values. If 10% missing values of each variable are the same position, there will be the largest possible subsample,90. If 10% missing values of each variable are the different position totally(不重复的位置), there will be the smallest possible subsample,0.
+### The dataset consists of 100 subjects and 10 variables. Each variable contains 10% of missing values (10 missing values). If 10% missing values of each variable are the same position, there will be the largest possible subsample, 100*(1-10%) = 90. If 10% missing values of each variable are the different and completely unique position, there will be the smallest possible subsample, 100*(1-10*10%) = 0.
 
 
 ## 3.
 ### (a) MAR
 ### MAR:Since a=2 and b=0,hence in the missing condition: "a*(Y1-1)+b*(Y2-5)+Z3<0", there isn't any contributions of Y2. So the missing values of Y2 are unrelate to themselves and relate to Y1. Therefore, MAR.
+
+### Comment: Under the MAR, as shown in the graph, the peak of the observed (after imposing missingness) data density moves right and become higher than the complete data, and the density of complete data and observed (after imposing missingness)  data are not similar. This is consistent with the rule of MAR mechanism, that complete data and observed data distribution are different.
 
 ```{r}
 #Question 3
@@ -47,8 +52,8 @@ legend(6, 0.3,legend = c("Complete data", "Observed data"),cex=0.8,
 
 ```
 
-## Question 3
 ## (b)
+### Comment: Imputing the missing values using stochastic regression imputation means here we use a regression model to predict the incomplete variables(Y2) from the complete variable(Y1), and then add noise to the predictions, which can restore lost variability to the data. Further, stochastic regression imputation can give unbiased parameter estimates under MAR. Hence, as shown in this graph, the density of complete data and data after imputation are similar compared with the graph in the Question(a). This also can show that the stochastic regression imputation approach is a great way to fill the missing data. And it can cause relatively less errors within this approach. 
 
 ```{r}
 #Question 3
@@ -83,7 +88,9 @@ legend(6, 0.3,legend = c("Complete data", "Completed data(after imputation)"),ce
 ```
 
 ### (c) MNAR
-### MAR:Since a=0 and b=2, hence in the missing condition: "a*(Y1-1)+b*(Y2-5)+Z3<0", there isn't any contributions of Y1. So the missing values of Y2 are unrelate to Y1 and relate to Y2. Therefore, MNAR.
+### MNAR:Since a=0 and b=2, hence in the missing condition: "a*(Y1-1)+b*(Y2-5)+Z3<0", there isn't any contributions of Y1. So the missing values of Y2 are unrelate to Y1 and relate to Y2. Therefore, MNAR.
+
+### Comment: Under the MNAR, as shown in the graph, the peak of the observed (after imposing missingness) data density moves right and become higher than the complete data, and the density of complete data and observed (after imposing missingness) data are quite different. This is consistent with the rule of MNAR mechanism, that complete data and observed data distribution are different.
 ```{r}
 #Question 3
 # (c)
@@ -109,6 +116,7 @@ legend(8, 0.5,legend = c("Complete data", "Observed data"),cex=0.8,
 
 ## Question 3
 ## (d)
+### Comment: Under imputing the missing values using stochastic regression imputation, as shown in this graph, the density of complete data and data after imputation are relatively similar compared with graph in the Question(c). That implies the stochastic regression imputation is a great approach to fill the missing data. However, due to MNAR mechanism, they are still a bit different from the density of complete data and completed data after imputation. 
 
 ```{r}
 #Question 3
@@ -143,8 +151,11 @@ legend(8, 0.27,legend = c("Complete data", "Completed data(after imputation)"),c
 ```
 
 ## 4.
-### (a) The mean value of the recovery time provided by a complete case analysis is 19.27273 and the associated standard error is 2.603013.
-### The correlations between the recovery time and the dose is 0.2391256, and the correlations between the recovery time and the blood pressure is -0.01952862.
+### (a) 
+###The mean value of the recovery time provided by a complete case analysis is 19.27273. 
+###The associated standard error is 2.603013.
+###The correlations between the recovery time and the dose is 0.2391256. 
+###The correlations between the recovery time and the blood pressure is -0.01952862.
 
 ```{r}
 load("databp.Rdata")
@@ -161,8 +172,11 @@ cor1
 cor2
 ```
 
-### (b) The mean value of the recovery time provided by a complete case analysis is 19.27273 and the associated standard error is 2.284135.
-### The correlations between the recovery time and the dose is 0.2150612, and the correlations between the recovery time and the blood pressure is -0.01934126.
+### (b) 
+###The mean value of the recovery time provided by a complete case analysis is 19.27273.
+###The associated standard error is 2.284135.
+###The correlations between the recovery time and the dose is 0.2150612.
+###The correlations between the recovery time and the blood pressure is -0.01934126.
 
 ```{r}
 re_mi <- ifelse(is.na(databp$recovtime), mean(databp$recovtime, na.rm = TRUE), databp$recovtime)
@@ -178,12 +192,14 @@ cor1_b
 cor2_b
 ```
 
-### (c) The mean value of the recovery time provided by a complete case analysis is 19.44428 and the associated standard error is 2.312845.
-### The correlations between the recovery time and the dose is 0.2801835, and the correlations between the recovery time and the blood pressure is -0.0111364.
+### (c) 
+###The mean value of the recovery time provided by a complete case analysis is 19.44428.
+###The associated standard error is 2.312845.
+###The correlations between the recovery time and the dose is 0.2801835.
+###The correlations between the recovery time and the blood pressure is -0.0111364.
 
 ```{r}
 fit_c <- lm(recovtime ~ logdose+bloodp, data = databp) 
-coef(fit_c)
 predicted_ri <- predict(fit_c, newdata = databp)
 re_ri <- ifelse(is.na(databp$recovtime), predicted_ri, databp$recovtime)
 
@@ -198,10 +214,13 @@ cor1_c
 cor2_c
 ```
 
-### (d) The mean value of the recovery time provided by a complete case analysis is 20.4598 and the associated standard error is 2.444571.
-### The correlations between the recovery time and the dose is 0.2284537, and the correlations between the recovery time and the blood pressure is -0.01786944.
+### (d) 
+###The mean value of the recovery time provided by a complete case analysis is 20.4598.
+###The associated standard error is 2.444571.
+###The correlations between the recovery time and the dose is 0.2284537.
+###The correlations between the recovery time and the blood pressure is -0.01786944.
 
-### 
+### As for stochastic regression imputation, with adding noise term, which can lead to relatively implausible predictions. For example, it makes no sense that impute a negative value for the Variables that are prone to missing。 
 
 ```{r}
 fit_d <- lm(recovtime ~ logdose+bloodp, data = databp) 
@@ -222,6 +241,8 @@ cor2_d
 ```
 
 ### (e)
+### As for this question, as shown in the output, first three lines output is the predicted values of each individuals in recovtime. Further, for the 4th, 10th and 22th missing value in recovtime should be imputed with the 6th, 2nd, and 17th value in the recovtime. And the imputed vales are 13, 10, 39 respectively. Finally, there is an output with the whole vales (after imputing) of recovtime.
+
 ```{r}
 f<-function(logdose,bloodp){
   co<-coef(fit_c)
@@ -234,7 +255,7 @@ y<-databp$recovtime
 for (i in 1:25){ 
   if (((pre_value[i]-pre_value[4])^2) == min((pre_value[-c(4,10,22)]-pre_value[4])^2)){
     print(i)
-    y[4]<-pre_value[i]
+    y[4]<-y[i]
     print(y[4])
   }
 }
@@ -242,7 +263,7 @@ for (i in 1:25){
 for (i in 1:25){ 
   if (((pre_value[i]-pre_value[10])^2) == min((pre_value[-c(4,10,22)]-pre_value[10])^2)){
     print(i)
-    y[10]<-pre_value[i]
+    y[10]<-y[i]
     print(y[10])
   }
 }
@@ -250,7 +271,7 @@ for (i in 1:25){
 for (i in 1:25){ 
   if (((pre_value[i]-pre_value[22])^2) == min((pre_value[-c(4,10,22)]-pre_value[22])^2)){
     print(i)
-    y[22]<-pre_value[i]
+    y[22]<-y[i]
     print(y[22])
   }
 }
@@ -259,7 +280,10 @@ print(y)
 ```
 
 
+### (f)
+#### Predictive mean matching over stochastic regression imputation will be more precision. And predictive mean matching can relatively fix the problem that stochastic regression attenuate statndard errors of the estimates as many single imputation.
 
+### Firstly, there are many problems which are nonlinear, hence it will be more precision if this problem can be modified. Additionally, this approach maybe can produce substantially biased estimates of correlations and regression coefficients, which is another potential problem.  
 
 
 
